@@ -6,147 +6,104 @@
 /*   By: pteixeir <pteixeir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 19:39:35 by pteixeir          #+#    #+#             */
-/*   Updated: 2025/01/08 22:36:58 by pteixeir         ###   ########.fr       */
+/*   Updated: 2025/01/10 23:38:55 by pteixeir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strdup(const char *s)
+void *ft_calloc(size_t nmemb, size_t size)
 {
-	char	*str_mlc;
-	size_t	size_of_s;
-	size_t	i;
+	unsigned char	*ptr;
+	size_t			i;
+	size_t			total_size;
 
-	i = 0;
-	size_of_s = ft_strlen(s);
-	str_mlc = malloc(sizeof(char) * (size_of_s + 1));
-	if (str_mlc == NULL)
+	total_size = nmemb * size;
+	ptr = malloc(total_size);
+	if (!ptr)
 		return (NULL);
-	while (i < size_of_s)
+	i = 0;
+	while (i < total_size)
 	{
-		str_mlc[i] = s[i];
+		ptr[i] = 0;
 		i++;
 	}
-    str_mlc[i] = '\0';
-	return (str_mlc);
+	return (ptr);
 }
 
-char *ft_strchr(const char *s, int c)
+int	ft_check_chars(char *str, int c)
 {
-    int i;
-    
-    i = 0;
-    
-    if (!s)
-        return (NULL);
-    while (s[i])
-    {
-        if (s[i] == (char)c)
-            return ((char *)&s[i]);
-        i++;
-    }
-    return (NULL);
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
-size_t ft_strlen(const char *s)
+char *ft_strcpy_gnl(char *src, char *dest, int gnl_stop)
+{
+	int	i;
+
+	i = 0;
+	while (src[i])
+	{
+		dest[i] = src[i];
+		if (gnl_stop && src[i] == '\n')
+		{
+			i++;
+			break ;
+		}
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+size_t ft_strlen_gnl(const char *s)
 {
     size_t i;
     
     i = 0;
-    while (s[i])
+    if (!s)
+        return (0);
+    while (s && s[i])
         i++;
     return (i);
 }
 
-char *ft_strjoin(char const *s1, char const *s2)
+char *ft_strjoin_gnl(char *s1, char *s2)
 {
     char    *new_str;
-    size_t  i;
-    size_t  j;
-
-    if (!s1 && !s2)
-        return (NULL);
-    if (!s1)
-    return (ft_strdup(s2));
-    if (!s2)
-    return (ft_strdup(s1));
-    new_str = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-    if (!new_str)
-        return(NULL);
-    i = 0;
-    while (s1[i])
-    {
-        new_str[i] = s1[i];
-        i++;
-    }
-    j = 0;
-    while (s2[j])
-    {
-        new_str[i + j] = s2[j];
-        j++;
-    }
-    new_str[i + j] = '\0';
-    return (new_str);
-}
-
-char *extract_line(char *stash)
-{
-    char    *line;
-    int i;
-    
-    if (!stash)
-        return (NULL);
-    i = 0;
-    while (stash[i])
-        i++;
-    line = malloc(sizeof(char) * (i + 1));
-    if (!line)
-        return (NULL);
-    i = 0;
-    while (stash[i])
-    {
-        line[i] = stash[i];
-        i++;
-    }
-    if (stash[i] == '\n')
-    {
-        line[i] = '\n';
-        i++;
-    }
-    line[i] = '\0';
-    return (line);    
-}
-
-char *adjust_stash(char *stash)
-{
-    char    *new_stash;
-    int i;
-    int j;
-
-    if (!stash)
-        return (NULL);
-
-    i = 0;
-    while (stash[i])
-        i++;
-    if (!stash[i])
-    {
-        free(stash);
-        return (NULL);
-    }
-    new_stash = malloc(sizeof(char) * (ft_strlen(stash) - i));
-    if  (!new_stash)
-        return(NULL);
-    i++;
-    j = 0; 
-    while (stash[i])
-    {
-        new_stash[j] = new_stash[i];
-        i++;
-        j++;
-    }
-    new_stash[j] = '\0';
-    free(stash);
-    return (new_stash);
+    size_t  len1 = 0, len2 = 0, i = 0, j = 0;
+	
+	if (s1)
+		while (s1[len1])
+			len1++;
+	if (s2)
+		while (s2[len2])
+			len2++;
+	new_str = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	if (!new_str)
+		return (NULL);
+	while (s1 && s1[i])
+	{
+		new_str[i] = s1[i];
+		i++;
+	}
+	while (s2 && s2[j])
+	{
+		new_str[i] = s2[j];
+		j++;
+		i++;
+	}
+	new_str[i] = '\0';
+	free(s1);
+	return (new_str);
 }
