@@ -6,13 +6,13 @@
 /*   By: pteixeir <pteixeir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 19:39:35 by pteixeir          #+#    #+#             */
-/*   Updated: 2025/01/10 23:38:55 by pteixeir         ###   ########.fr       */
+/*   Updated: 2025/01/11 03:01:26 by pteixeir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void *ft_calloc(size_t nmemb, size_t size)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
 	unsigned char	*ptr;
 	size_t			i;
@@ -31,7 +31,7 @@ void *ft_calloc(size_t nmemb, size_t size)
 	return (ptr);
 }
 
-int	ft_check_chars(char *str, int c)
+int	ft_char_in_str(char *str, int c)
 {
 	int	i;
 
@@ -47,7 +47,7 @@ int	ft_check_chars(char *str, int c)
 	return (0);
 }
 
-char *ft_strcpy_gnl(char *src, char *dest, int gnl_stop)
+char	*ft_strcpy_gnl(char *src, char *dest, int gnl_stop)
 {
 	int	i;
 
@@ -66,30 +66,28 @@ char *ft_strcpy_gnl(char *src, char *dest, int gnl_stop)
 	return (dest);
 }
 
-size_t ft_strlen_gnl(const char *s)
+size_t	ft_strlen_gnl(char *s)
 {
-    size_t i;
-    
-    i = 0;
-    if (!s)
-        return (0);
-    while (s && s[i])
-        i++;
-    return (i);
+	size_t	i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (s && s[i])
+		i++;
+	return (i);
 }
 
-char *ft_strjoin_gnl(char *s1, char *s2)
+char	*ft_strjoin_gnl(char *s1, char *s2)
 {
-    char    *new_str;
-    size_t  len1 = 0, len2 = 0, i = 0, j = 0;
-	
-	if (s1)
-		while (s1[len1])
-			len1++;
-	if (s2)
-		while (s2[len2])
-			len2++;
-	new_str = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	char		*new_str;
+	size_t		len;
+	int			i;
+	int			j;
+
+	i = 0;
+	len = ft_strlen_gnl(s1) + ft_strlen_gnl(s2);
+	new_str = ft_calloc((len + 1), sizeof(char));
 	if (!new_str)
 		return (NULL);
 	while (s1 && s1[i])
@@ -97,13 +95,13 @@ char *ft_strjoin_gnl(char *s1, char *s2)
 		new_str[i] = s1[i];
 		i++;
 	}
+	j = 0;
 	while (s2 && s2[j])
 	{
 		new_str[i] = s2[j];
-		j++;
 		i++;
+		j++;
 	}
-	new_str[i] = '\0';
 	free(s1);
 	return (new_str);
 }
